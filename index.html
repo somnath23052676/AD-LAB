@@ -2,84 +2,225 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Somnath Sinha Mahapatra | Resume</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ollama Chatbot</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        /*here we imported url to use the Roboto font family*/
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #chat-container {
+            width: 90%;
+            max-width: 1600px;
+            height: 90%;
+            max-height: 80%;
+            background-color: #1e1e1e;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        #chat-interface {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chat-history {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #2a2a2a;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-height: 100%;
+            border-bottom: 1px solid #444;
+        }
+
+        .message-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .user-avatar, .bot-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .user-avatar {
+            margin-right: 10px;
+        }
+
+        .bot-avatar {
+            margin-left: 10px;
+        }
+
+        .user-message-container {
+            align-self: flex-end;
+            margin-left: auto;
+            margin-right: 10px;
+        }
+
+        .bot-message-container {
+            align-self: flex-start;
+            margin-right: auto;
+            margin-left: 10px;
+        }
+
+        .user-message, .bot-message {
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background-color: #0078D7;
+            color: white;
+        }
+
+        .bot-message {
+            background-color: #3a3a3a;
+            color: white;
+        }
+
+        #input-container {
+            display: flex;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-top: 1px solid #444;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #444;
+            background-color: #2a2a2a;
+            color: white;
+            font-size: 16px;
+        }
+
+        #send-button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 10px;
+            background-color: #0078D7;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        #send-button:hover {
+            background-color: #005bb5;
+            transform: scale(1.05);
+        }
+
+        #send-button:active {
+            transform: scale(1);
+        }
+
+        #chatbot-heading {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            background-color: #1e1e1e;
+            padding: 10px 0;
+            border-bottom: 1px solid #444;
+        }
+    </style>
 </head>
 <body>
-
-<div class="resume">
-
-    <header>
-        <h1>Somnath Sinha Mahapatra</h1>
-        <h2>B.Tech CSE</h2>
-        <p class="summary">
-            Aspiring software developer seeking an internship to leverage my problem-solving skills and
-            knowledge in Java, Python, SQL, and Linux. Passionate about Machine Learning and Natural
-            Language Processing, eager to contribute to innovative projects.
-        </p>
-
-        <div class="links">
-            <a href="https://leetcode.com/u/Somnath23052676/" target="_blank">LeetCode</a>
-            <a href="https://github.com/somnath23052676" target="_blank">GitHub</a>
-            <a href="mailto:23052676@kiit.ac.in">23052676@kiit.ac.in</a>
+    <div id="chat-container">
+        <div id="chat-interface">
+            <div id="chatbot-heading">Ollama-based Chatbot</div>
+            <div id="chat-history"></div>
+            <div id="input-container">
+                <input type="text" id="user-input" placeholder="Type your message here...">
+                <button id="send-button">Send</button>
+            </div>
         </div>
-    </header>
+    </div>
 
-    <section>
-        <h3>Skills</h3>
-        <ul>
-            <li><b>Programming Languages:</b> Java, Python, SQL, Bash</li>
-            <li><b>Operating Systems:</b> Linux (Ubuntu, RedHat)</li>
-            <li><b>Development Tools:</b> Git, Neovim, GNOME</li>
-            <li><b>Problem Solving:</b> Solved 250+ problems on LeetCode</li>
-            <li><b>Extra Skills:</b> Natural Language Processing, Machine Learning</li>
-        </ul>
-    </section>
+    <script>
+        $(document).ready(function() {
+            const chatHistory = {{ chat_history | tojson | safe }}; // Assuming this is correctly populated by Flask
 
-    <section>
-        <h3>Certificates</h3>
-        <ul>
-            <li>Problem Solving (Basic) – HackerRank</li>
-            <li>Java (Basic) – HackerRank</li>
-            <li>Python (Basic) – HackerRank</li>
-            <li>Machine Learning with Python – IBM (Coursera)</li>
-            <li>Introduction to Data Analytics – IBM (Coursera)</li>
-            <li>Java Programming for Beginners: A-Z Java Fundamentals</li>
-            <li>Introduction to SQL</li>
-        </ul>
-    </section>
+            function appendMessage(role, message) {
+                const avatar = role === 'user' ? 'static/user.jpg' : 'static/artificial-intelligence.png';
+                const messageClass = role === 'user' ? 'user-message' : 'bot-message';
+                const containerClass = role === 'user' ? 'user-message-container' : 'bot-message-container';
 
-    <section>
-        <h3>Education</h3>
-        <p>
-            <b>Kalinga Institute of Industrial Technology</b><br>
-            B.Tech in Computer Science and Engineering<br>
-            Graduating Year: 2027<br>
-            KIIT Campus, Patia, Bhubaneswar, Odisha – 751024
-        </p>
-    </section>
+                const messageContainer = `
+                    <div class="message-container ${containerClass}">
+                        <img src="${avatar}" alt="Avatar" class="${role}-avatar">
+                        <div class="${messageClass}">${message}</div>
+                    </div>
+                `;
 
-    <section>
-        <h3>Projects</h3>
-        <div class="project">
-            <h4>Movie Recommender System</h4>
-            <ul>
-                <li>Uses spaCy library</li>
-                <li>Based on Natural Language Processing</li>
-            </ul>
-        </div>
+                $('#chat-history').append(messageContainer);
+                $('#chat-history').scrollTop($('#chat-history')[0].scrollHeight);
+            }
+        // This function sends a user message to the chatbot and appends the response to the chat history
+            function sendMessage() {
+                var userInput = $('#user-input').val();
+                if (userInput.trim() !== '') {
+                    appendMessage('user', userInput);
+                    $('#user-input').val('');
 
-        <div class="project">
-            <h4>Terminal Login Screen</h4>
-            <ul>
-                <li>Bash scripting</li>
-                <li>Linux terminal customization</li>
-            </ul>
-        </div>
-    </section>
+                    $.ajax({
+                        type: 'POST',
+                        url: '/chat',
+                        data: {'user_input': userInput},
+                        success: function(response) {
+                            appendMessage('bot', response.response);
+                        },
+                        error: function() {
+                            appendMessage('bot', 'Error: Failed to generate response.');
+                        }
+                    });
+                }
+            //this dunction is used to send the message to the chatbot
+            }
 
-</div>
+            $('#send-button').click(function() {
+                sendMessage();
+            });
+            //this function is used to send the message to the chatbot on click of the send button
 
+            $('#user-input').keypress(function(event) {
+                if (event.keyCode === 13) {
+                    sendMessage();
+                }
+            });
+            //this function is used to send the message to the chatbot on the press of enter key
+
+            chatHistory.forEach(item => {
+                appendMessage(item.role, item.content);
+            });
+            //this function adds the message to the chat history
+        });
+    </script>
 </body>
 </html>
-
